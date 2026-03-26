@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delete Videos</title>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color:#fff;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:25px;
+  font-weight:600;
+}
+
+.cards-container{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap:20px;
+}
+
+.card{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border-radius:15px;
+  padding:15px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 8px 20px rgba(0,0,0,0.3);
+  transition:0.3s;
+  text-align:center;
+}
+
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+
+.card h2{
+  font-size:18px;
+  margin-bottom:12px;
+  min-height:45px;
+}
+
+.card button{
+  padding:10px;
+  width:100%;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  color:#fff;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.card button:hover{
+  transform:scale(1.05);
+  box-shadow:0 5px 15px rgba(255,75,43,0.4);
+}
+
+@media(max-width:480px){
+  .cards-container{
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Delete Video</h1>
+
+<div class="cards-container">
+  <% data.forEach(function(item){ %>
+    <div class="card">
+      <form action="/video/delete/<%= item.routeName %>" method="post">
+        <img src="<%= item.imageLink %>" alt="<%= item.title %>">
+        <h2><%= item.title %></h2>
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  <% }) %>
+</div>
+
+</body>
+</html>

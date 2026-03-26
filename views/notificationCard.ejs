@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Notification</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
+}
+
+.notificationCardContainer{
+
+position:fixed;
+top:60px;
+left:50%;
+transform:translateX(-50%);
+width:320px;
+height:70px;
+
+background:white;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+display:flex;
+align-items:center;
+
+padding:10px;
+text-decoration:none;
+color:black;
+
+z-index:999;
+}
+
+/* profile image */
+
+.profileImg{
+
+width:50px;
+height:50px;
+border-radius:50%;
+overflow:hidden;
+margin-right:10px;
+
+}
+
+.profileImg img{
+
+width:100%;
+height:100%;
+object-fit:cover;
+
+}
+
+/* text */
+
+.notificationText{
+
+flex:1;
+
+}
+
+.notificationName{
+
+font-weight:bold;
+font-size:14px;
+
+}
+
+.notificationMessage{
+
+font-size:12px;
+color:#555;
+
+}
+
+/* hide button */
+
+.hideNotification{
+
+position:absolute;
+top:5px;
+right:8px;
+
+cursor:pointer;
+color:#888;
+
+}
+
+.hideNotification:hover{
+
+color:red;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<a href="<%= redirectUrl %>" class="notificationCardContainer" id="notificationCard" style="display:none">
+
+<div class="profileImg">
+<img id="profileImage">
+</div>
+
+<div class="notificationText">
+
+<div class="notificationName" id="userName"></div>
+<div class="notificationMessage" id="userMessage"></div>
+
+</div>
+
+<div class="hideNotification" onclick="hideNotification(event)">
+<i class="fa-solid fa-xmark"></i>
+</div>
+
+</a>
+
+
+<script>
+
+/* JSON data */
+
+const notificationData = [
+  
+  {
+    "name": "Miss Ayesha Akter",
+    "imageLink": "https://i.postimg.cc/NGHSB9sW/9.jpg",
+    "message": "কেমন আছেন 😊"
+  },
+  {
+    "name": "Nusrat Jahan",
+    "imageLink": "https://i.postimg.cc/MKJ4T6XJ/8.jpg",
+    "message": "Hi… তোমাকে খুব ইন্টারেস্টিং লাগছে 🙂"
+  },
+  {
+    "name": "Sumaiya Islam",
+    "imageLink": "https://i.postimg.cc/h4d6czDr/7.jpg",
+    "message": "আজ রাতে কি করছো?"
+  },
+  {
+    "name": "Ms Farzana Yasmin",
+    "imageLink": "https://i.postimg.cc/sDC8Xj1f/6.jpg",
+    "message": "তুমি কি সবসময় এত cute হও?"
+  },
+  {
+    "name": "Tamanna Rahman",
+    "imageLink": "https://i.postimg.cc/HWyRdcWY/5.jpg",
+    "message": "I was bored… তাই ভাবলাম তোমাকে message করি 😇"
+  },
+  {
+    "name": "Miss Sadia Afrin",
+    "imageLink": "https://i.postimg.cc/XNCm4Gj2/4.jpg",
+    "message": "Hey! আজ রাতে free কি?"
+  },
+  {
+    "name": "Lamia Sultana",
+    "imageLink": "https://i.postimg.cc/ZYd24Bbw/3.jpg",
+    "message": "তুমি কি single"
+  },
+  {
+    "name": "Raisa Karim",
+    "imageLink": "https://i.postimg.cc/YqBV9rjK/21.jpg",
+    "message": "তুমি কি সবসময় এত smart?"
+  },
+  {
+    "name": "Mrs Sharmin Akter",
+    "imageLink": "https://i.postimg.cc/WpkCTFNH/17.jpg",
+    "message": "Missing your vibes… তুমি কি ফ্রি?"
+  },
+  {
+    "name": "Tasnia Tabassum",
+    "imageLink": "https://i.postimg.cc/bNfMJydX/18.jpg",
+    "message": "তোমার সাথে গল্প করতে অনেক ইচ্ছে করছে।"
+  },
+  {
+    "name": "Jannatul Ferdous",
+    "imageLink": "https://i.postimg.cc/xTV7Cfq0/19.jpg",
+    "message": "Hey cutie… আজ কি করছো?"
+  },
+  {
+    "name": "Mrs Ruksana Begum",
+    "imageLink": "https://i.postimg.cc/wxmZgyqb/2.jpg",
+    "message": "তোমার voice শুনতে চাই…"
+  },
+  {
+    "name": "Nabila Rahman",
+    "imageLink": "https://i.postimg.cc/SNb5sSj4/20.jpg",
+    "message": "I feel like আমরা ভালো friends হতে পারি 😊"
+  },
+  {
+    "name": "Miss Mim Akter",
+    "imageLink": "https://i.postimg.cc/VsCpmrf2/11.jpg",
+    "message": "তোমার style খুব unique…"
+  },
+  {
+    "name": "Mahjabin Haque",
+    "imageLink": "https://i.postimg.cc/y6Ztsg6Y/12.jpg",
+    "message": "তুমি কি আজ আমাকে একটু attention দেবে?"
+  },
+  {
+    "name": "Ms Sabrina Sultana",
+    "imageLink": "https://i.postimg.cc/Y2WZMGrP/13.jpg",
+    "message": "Hi… তুমি কি আজ বোর হচ্ছো?"
+  },
+  {
+    "name": "Fatema Khatun",
+    "imageLink": "https://i.postimg.cc/jq7mtwqb/14.jpg",
+    "message": "তুমি কি আমার সাথে চ্যাট করতে চাও?"
+  },
+  {
+    "name": "Mahiya Mahmud",
+    "imageLink": "https://i.postimg.cc/3rvVY4rY/16.jpg",
+    "message": "তুমি কি সবসময় এত সেক্সি? 😉"
+  },
+  {
+    "name": "Mrs Sultana Parvin",
+    "imageLink": "https://i.postimg.cc/yxkF6HKv/images_(15).jpg",
+    "message": "তোমার মেসেজ পেলে খুব ভালো লাগবে।"
+  },
+  {
+    "name": "Tanjina Akter",
+    "imageLink": "https://i.postimg.cc/sfhqsQj6/1.jpg",
+    "message": "আমি তোমার সাথে একটু মজা করতে চাই।"
+  }
+  
+];
+
+const card = document.getElementById("notificationCard");
+
+
+/* random notification */
+
+function showRandomNotification(){
+
+const randomUser = notificationData[Math.floor(Math.random()*notificationData.length)];
+
+document.getElementById("profileImage").src = randomUser.imageLink;
+document.getElementById("userName").innerText = randomUser.name;
+document.getElementById("userMessage").innerText = randomUser.message;
+
+card.style.display="flex";
+
+}
+
+
+/* cookie set */
+
+function setCookie(name,value,seconds){
+
+let date = new Date();
+date.setTime(date.getTime()+(seconds*1000));
+
+let expires="expires="+date.toUTCString();
+
+document.cookie=name+"="+value+";"+expires+";path=/";
+
+}
+
+
+/* cookie get */
+
+function getCookie(name){
+
+let cname=name+"=";
+let decodedCookie=decodeURIComponent(document.cookie);
+let ca=decodedCookie.split(';');
+
+for(let i=0;i<ca.length;i++){
+
+let c=ca[i];
+
+while(c.charAt(0)==' '){
+
+c=c.substring(1);
+
+}
+
+if(c.indexOf(cname)==0){
+
+return c.substring(cname.length,c.length);
+
+}
+
+}
+
+return "";
+
+}
+
+
+/* notification click */
+
+card.addEventListener("click",function(){
+
+card.style.display="none";
+
+setCookie("hideNotification","yes",30);
+
+/* 30 sec later new notification */
+
+setTimeout(()=>{
+
+showRandomNotification();
+
+},30000);
+
+});
+
+
+/* check cookie */
+
+window.onload=function(){
+
+if(getCookie("hideNotification")=="yes"){
+
+card.style.display="none";
+
+setTimeout(()=>{
+
+showRandomNotification();
+
+},30000);
+
+}else{
+
+/* page load er 30 sec por */
+
+setTimeout(()=>{
+
+showRandomNotification();
+
+},30000);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

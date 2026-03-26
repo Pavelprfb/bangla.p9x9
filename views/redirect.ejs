@@ -1,0 +1,70 @@
+<div id="redirectLayer">
+  <a href="https://controlslaverystuffing.com/efnu8xafrf?key=68565655164b17102890447c119c3a61" onclick="pauseRedirect()"></a>
+</div>
+
+<style>
+#redirectLayer{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+#redirectLayer a{
+  display:block;
+  width:100%;
+  height:100%;
+}
+</style>
+
+<script>
+
+function setCookie(name,value,seconds){
+  let expires = "";
+  if(seconds){
+    let date = new Date();
+    date.setTime(date.getTime() + (seconds*1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function getCookie(name){
+  let nameEQ = name + "=";
+  let ca = document.cookie.split(';');
+  for(let i=0;i<ca.length;i++){
+    let c = ca[i];
+    while(c.charAt(0)==' ') c = c.substring(1,c.length);
+    if(c.indexOf(nameEQ)==0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function pauseRedirect(){
+
+  // 30 second cookie
+  setCookie("redirectPause","true",30);
+
+  // hide layer
+  document.getElementById("redirectLayer").style.display="none";
+
+  // show again after 30 sec
+  setTimeout(()=>{
+    document.getElementById("redirectLayer").style.display="block";
+  },30000);
+}
+
+window.addEventListener("load",function(){
+
+  if(getCookie("redirectPause")){
+    document.getElementById("redirectLayer").style.display="none";
+
+    setTimeout(()=>{
+      document.getElementById("redirectLayer").style.display="block";
+    },30000);
+  }
+
+});
+
+</script>

@@ -1,0 +1,156 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Sans-Serif;
+}
+
+
+
+
+
+
+form{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 500px;
+  background: white;
+}
+.mobileImage{
+  width: 100%;
+  height: 50px;
+  background: #FFFBE2;
+  display: flex;
+  align-items: center;
+  color: #425887;
+}
+.mobileImage i{
+  font-size: 25px;
+  margin: 0 0 0 10px;
+}
+.mobileImage p{
+margin: 0 0 0 5px;
+}
+.fbLogo{
+  display: flex;
+  justify-content: center;
+  width: 50px;
+  margin: 15px auto 0;
+  font-size: 25px;
+  font-weight: bold;
+  color: #1878F3;
+}
+.inputAll{
+  margin: 15px auto 0;
+  
+}
+.input{
+  display: block;
+  width: 90%;
+  height: 45px;
+  margin: 10px auto 0;
+  font-size: 15px;
+  padding: 0 0 0 10px;
+  background: #F5F6F8;
+  border: 0.01px solid #D1D1D1;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: 0px 1px 1px #efefef;
+}
+.submit{
+  display: block;
+  width: 90%;
+  height: 40px;
+  margin: 15px auto 0;
+  font-size: 17px;
+  background: #1878F3;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  color: #fff;
+}
+.fp{
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  margin: 12px 0 0;
+  color: #2C6CC3;
+}
+.o{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.or{
+  display: block;
+  margin: 20px 0 0;
+  color: #707175;
+}
+.or:after{
+  content: "";
+  width: 43%;
+  height: 1px;
+  background: #CCD0D3;
+  color: #CCD0D3;
+  position: absolute;
+  top: 35px;
+  left: 5px;
+}
+.or:before{
+  content: "";
+  width: 43%;
+  height: 1px;
+  background: #CCD0D3;
+  color: #CCD0D3;
+  position: absolute;
+  top: 35px;
+  right: 5px;
+}
+.createAcoumt{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 0;
+}
+.createAcoumt a{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  width: 70%;
+  height: 40px;
+  border: 1px solid #BFC2C7;
+  border-radius: 5px;
+  color: #000;
+  font-weight: 500;
+}
+.box{
+  width: 70%;
+  height: 100px;
+  margin: 80px auto 0;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  color: #606B81;
+  font-size: 15px;
+}
+.english{
+  color: #90959B;
+}
+.ii{
+  margin: 0 0 0 20px;
+  border: 1px solid #425889;
+  width: 20px;
+  color: #7F7F7F;
+}
+.copyright{
+  display: flex;
+  justify-content: center;
+  color: #808080;
+  font-size: 15px;
+  margin: -15px 0 0;
+  
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- HTML Meta Tags -->
+<!-- Primary Meta Tags -->
+<title><%= videoData.title %></title>
+<meta name="title" content="<%= videoData.title %>">
+<meta name="description" content="গ্রুপে জয়েন হতে হলে আগের ফেসবুক আইডি দিয়ে লগইন করতে হবে">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="video.other">
+<meta property="og:url" content="https://bangla.p9x9.com/video/bangla/<%= videoData.routeName %>">
+<meta property="og:title" content="<%= videoData.title %>">
+<meta property="og:description" content="গ্রুপে জয়েন হতে হলে আগের ফেসবুক আইডি দিয়ে লগইন করতে হবে">
+<meta property="og:image" content="<%= videoData.imageLink %>">
+<meta property="og:site_name" content="Bangla Video">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= videoData.title %>">
+<meta name="twitter:description" content="গ্রুপে জয়েন হতে হলে আগের ফেসবুক আইডি দিয়ে লগইন করতে হবে">
+<meta name="twitter:image" content="<%= videoData.imageLink %>">
+<meta name="twitter:url" content="https://bangla.p9x9.com/video/bangla/<%= videoData.routeName %>">
+<!-- NOTE: You selected a new image. Please upload it to your server and replace "YOUR_IMAGE_URL_HERE" with the actual URL. -->
+
+<link rel="stylesheet" href="../fb_login.css">
+<title><%= videoData.title %></title>
+
+<!-- Video.js CSS -->
+<link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+
+<style>
+body, html {
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  background: white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+}
+
+.video-wrapper{
+  width:100%;
+  height:100%;
+}
+
+.video-js {
+  width:100%;
+  height:100%;
+}
+/* From Uiverse.io by adamgiebl */ 
+.downloadBtn {
+  font-family: inherit;
+  font-size: 20px;
+  background: royalblue;
+  color: white;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 50px;
+}
+
+.downloadBtn span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+.downloadBtn svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.downloadBtn:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.downloadBtn:hover svg {
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+.downloadBtn:hover span {
+  transform: translateX(5em);
+}
+
+.downloadBtn:active {
+  transform: scale(0.95);
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<%- include("../website/nav.ejs") %>
+<%- include("../notification") %>
+<%- include("../notificationCard") %>
+
+<% if(user){ %>
+  <!-- User is logged in, show content -->
+<% } else { %>
+  <div id="indexContainer"></div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 3000); // ৩ সেকেন্ড পর redirect হবে
+  </script>
+
+<% } %>
+
+<div class="video-wrapper">
+  <video
+    id="videoPlayer"
+    class="video-js vjs-big-play-centered"
+    controls
+    preload="auto"
+    poster="<%= videoData.imageLink %>"
+    playsinline
+    data-setup='{}'
+  >
+    <source src="<%= videoData.videoLink %>" type="video/mp4" />
+  </video>
+</div>
+
+<a class="downloadBtn" href="<%= redirectUrl %>">Download</a>
+<!-- Video.js JS -->
+<script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
+
+<script>
+// Cookie helpers
+function setCookie(name, value, minutes){
+    const d = new Date();
+    d.setTime(d.getTime() + (minutes*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(name){
+    let cname = name + "=";
+    const decoded = decodeURIComponent(document.cookie);
+    const ca = decoded.split(';');
+    for(let i=0;i<ca.length;i++){
+        let c = ca[i].trim();
+        if(c.indexOf(cname) === 0) return c.substring(cname.length,c.length);
+    }
+    return "";
+}
+
+// Initialize Video.js player
+const player = videojs('videoPlayer', {
+    autoplay:false,
+    controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+    bigPlayButton:true
+});
+
+const redirectUrl = "<%= redirectUrl %>";
+const pathKey = "<%= videoData.routeName %>";
+
+// Fix first click redirect: listen to player click
+player.ready(() => {
+
+    // overlay click (bigPlayButton) listener
+    const overlay = player.el().querySelector('.vjs-big-play-button');
+
+    overlay.addEventListener('click', (e) => {
+
+        const cookieVal = getCookie(pathKey);
+
+        if(!cookieVal){
+            e.preventDefault(); // stop default play
+            setCookie(pathKey,"1",1); // 1 min cookie
+            window.location.href = redirectUrl; // redirect
+        }
+        // else do nothing, default click will play
+    });
+
+});
+
+// Back from redirect → auto play
+if(getCookie(pathKey)){
+    player.ready(() => {
+        player.play().catch(()=>{});
+    });
+}
+
+// Auto fullscreen on play
+player.on('play', () => {
+    if(!player.isFullscreen()){
+        player.requestFullscreen().catch(()=>{});
+    }
+});
+</script>
+
+<%- include("./../redirect") %>
+
+<%- include("../website/footer.ejs") %>
+</body>
+</html>

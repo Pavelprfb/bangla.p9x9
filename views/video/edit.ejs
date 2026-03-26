@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Videos</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color:#fff;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:30px;
+  font-weight:600;
+}
+
+.cards-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+  gap:25px;
+}
+
+.data-card{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border-radius:15px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 8px 25px rgba(0,0,0,0.4);
+  transition:0.3s;
+}
+
+.data-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.5);
+}
+
+.data-card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+.data-card h2{
+  font-size:16px;
+  font-weight:600;
+  text-align:center;
+}
+
+@media(max-width:480px){
+  .cards-container{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
+</head>
+<body>
+
+<h1>All Videos</h1>
+
+<div class="cards-container">
+
+<% data.forEach(function(item){ %>  
+  <a href="/video/update/<%= item.routeName %>" class="data-card">  
+    <img src="<%= item.imageLink %>" alt="<%= item.title %>" />  
+    <h2><%= item.title %></h2>  
+  </a>  
+<% }) %>
+
+</div>
+
+</body>
+</html>

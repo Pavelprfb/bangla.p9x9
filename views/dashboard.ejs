@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>শুধু বাংলা ভিডিও</title>
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://bangla.p9x9.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="শুধু বাংলা ভিডিও">
+<meta property="og:description" content="গ্রুপে জয়েন হতে হলে আগের ফেসবুক আইডি দিয়ে লগইন করতে হবে">
+<meta property="og:image" content="https://i.postimg.cc/x1qKhhy5/1280x720-17564634.webp">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="bangla.p9x9.com">
+<meta property="twitter:url" content="https://bangla.p9x9.com/">
+<meta name="twitter:title" content="শুধু বাংলা ভিডিও">
+<meta name="twitter:description" content="গ্রুপে জয়েন হতে হলে আগের ফেসবুক আইডি দিয়ে লগইন করতে হবে">
+<meta name="twitter:image" content="https://i.postimg.cc/x1qKhhy5/1280x720-17564634.webp">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffffff;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.search-bar input[type="text"] {
+  padding: 10px 14px;
+  width: 250px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  color: #2c3e50;
+  transition: 0.3s;
+}
+
+.search-bar input[type="text"]:focus {
+  outline: none;
+  border-color: #0072ff;
+  box-shadow: 0 0 5px rgba(0,114,255,0.3);
+}
+
+.search-bar button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #0072ff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-bar button:hover {
+  background: #00c6ff;
+  color: #121212;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.video-card {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  color: #2c3e50;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.video-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,114,255,0.2);
+}
+
+.video-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pagination {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.pagination a {
+  padding: 8px 14px;
+  background: #0072ff;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.pagination a:hover {
+  background: #00c6ff;
+  color: #121212;
+}
+
+@media (max-width: 768px) {
+  .search-bar input[type="text"] {
+    width: 100%;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+</style>
+
+</head>
+<body>
+
+<%- include("website/nav.ejs") %>
+<%- include("notification") %>
+<%- include("notificationCard") %>
+
+<% if(user){ %>
+  <!-- User is logged in, show content -->
+<% } else { %>
+  <div id="indexContainer"></div>
+  <script>
+    setTimeout(() => {
+      fetch('/')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('indexContainer').innerHTML = html;
+        });
+    }, 3000);
+  </script>
+<% } %>
+
+<div class="container">
+
+<h2>Video Dashboard</h2>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search videos..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+  <button onclick="performSearch()">Search</button>
+</div>
+
+<div class="video-grid">
+<% allData.forEach(video => { %>
+  <a class="video-card" href="/video/bangla/<%= video.routeName %>">
+    <img src="<%= video.imageLink %>" alt="">
+    <div class="video-title"><%= video.title %></div>
+  </a>
+<% }) %>
+</div>
+
+<div class="pagination">
+<a id="prevBtn">Previous</a>
+<a id="nextBtn">Next</a>
+</div>
+</div>
+
+
+<script>
+// Pagination
+const params = new URLSearchParams(window.location.search);
+let page = parseInt(params.get("page")) || 1;
+let search = params.get("search") || "";
+
+if(page > 1){
+  document.getElementById("prevBtn").href = "/dashboard?page=" + (page - 1) + "&search=" + encodeURIComponent(search);
+}else{
+  document.getElementById("prevBtn").style.display = "none";
+}
+
+document.getElementById("nextBtn").href = "/dashboard?page=" + (page + 1) + "&search=" + encodeURIComponent(search);
+
+// Search function
+function performSearch(){
+  const query = document.getElementById("searchInput").value.trim();
+  window.location.href = "/dashboard?page=1&search=" + encodeURIComponent(query);
+}
+</script>
+
+<%- include("website/footer.ejs") %>
+</body>
+</html>

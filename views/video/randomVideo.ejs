@@ -1,0 +1,131 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffffff;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.search-bar input[type="text"] {
+  padding: 10px 14px;
+  width: 250px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  color: #2c3e50;
+  transition: 0.3s;
+}
+
+.search-bar input[type="text"]:focus {
+  outline: none;
+  border-color: #0072ff;
+  box-shadow: 0 0 5px rgba(0,114,255,0.3);
+}
+
+.search-bar button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #0072ff;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-bar button:hover {
+  background: #00c6ff;
+  color: #121212;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.video-card {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  color: #2c3e50;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.video-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,114,255,0.2);
+}
+
+.video-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .search-bar input[type="text"] {
+    width: 100%;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+</style>
+
+<div class="container">
+
+<div class="video-grid">
+<% 
+  // Shuffle the allData array randomly
+  const shuffledData = [...allData].sort(() => Math.random() - 0.5);
+  shuffledData.forEach(video => { 
+%>
+  <a class="video-card" href="/video/bangla/<%= video.routeName %>">
+    <img src="<%= video.imageLink %>" alt="<%= video.title %>">
+    <div class="video-title"><%= video.title %></div>
+  </a>
+<% }) %>
+</div>
+
+</div>
+
+<script>
+// Search function
+function performSearch(){
+  const query = document.getElementById("searchInput").value.trim();
+  if(query) {
+    window.location.href = "/random?search=" + encodeURIComponent(query);
+  }
+}
+</script>

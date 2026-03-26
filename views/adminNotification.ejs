@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Notification</title>
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+body{ background: linear-gradient(135deg, #141e30, #243b55); color:#fff; padding:20px; }
+h2{ text-align:center; margin-bottom:30px; }
+
+form{
+  max-width:600px;
+  margin:0 auto;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  padding:25px;
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+.form-group{ margin-bottom:20px; }
+
+input{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color:#fff;
+  font-size:14px;
+}
+
+input:focus{ outline:none; border-color:#00c6ff; }
+
+.input-wrapper{ display:flex; gap:6px; flex-wrap:wrap; }
+
+.input-btn{ display:flex; gap:6px; flex-shrink:0; margin-left:6px; }
+
+.input-btn button{
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+  flex-shrink:0;
+}
+
+.copy-btn{ background:#4CAF50; color:#fff; }
+.copy-btn:hover{ background:#3b8a40; }
+
+.paste-btn{ background:#ffa726; color:#fff; }
+.paste-btn:hover{ background:#fb8c00; }
+
+.clear-btn{ background:#ff4141; color:#fff; }
+.clear-btn:hover{ background:#d70000; }
+
+button[type="submit"]{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button[type="submit"]:hover{
+  transform:scale(1.03);
+  box-shadow:0 5px 15px rgba(0,114,255,0.4);
+}
+
+/* Toast popup */
+#toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color:#fff;
+  padding:10px 18px;
+  border-radius:6px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.5s;
+  z-index:9999;
+  font-weight:500;
+}
+
+@media(max-width:480px){
+  .input-wrapper{ flex-direction:column; }
+  .input-btn{ flex-wrap:wrap; gap:4px; margin-left:0; }
+}
+</style>
+</head>
+<body>
+
+<h2>Send Notification</h2>
+
+<form action="/admin/notification" method="POST">
+
+  <div class="form-group">
+    <div class="input-wrapper">
+      <input type="text" id="title" name="title" placeholder="Notification Text">
+      <div class="input-btn">
+        <button type="button" class="copy-btn" onclick="copyInput('title')">Copy</button>
+        <button type="button" class="paste-btn" onclick="pasteInput('title')">Paste</button>
+        <button type="button" class="clear-btn" onclick="clearInput('title')">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-wrapper">
+      <input type="text" id="image" name="image" placeholder="Image URL">
+      <div class="input-btn">
+        <button type="button" class="copy-btn" onclick="copyInput('image')">Copy</button>
+        <button type="button" class="paste-btn" onclick="pasteInput('image')">Paste</button>
+        <button type="button" class="clear-btn" onclick="clearInput('image')">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-wrapper">
+      <input type="text" id="url" name="url" placeholder="Click URL (https://example.com)">
+      <div class="input-btn">
+        <button type="button" class="copy-btn" onclick="copyInput('url')">Copy</button>
+        <button type="button" class="paste-btn" onclick="pasteInput('url')">Paste</button>
+        <button type="button" class="clear-btn" onclick="clearInput('url')">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit">Send Notification</button>
+
+</form>
+
+<div id="toast"></div>
+
+<script>
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.style.opacity = '1';
+  setTimeout(()=>{ toast.style.opacity = '0'; }, 2500);
+}
+
+function copyInput(id){
+    const input = document.getElementById(id);
+    input.select();
+    input.setSelectionRange(0,99999);
+    navigator.clipboard.writeText(input.value);
+    showToast("✅ Copied: " + input.value);
+}
+
+async function pasteInput(id){
+    const input = document.getElementById(id);
+    try{
+      const text = await navigator.clipboard.readText();
+      input.value = text;
+      showToast("📋 Pasted: " + text);
+    }catch(e){
+      showToast("❌ Unable to paste!");
+    }
+}
+
+function clearInput(id){
+    const input = document.getElementById(id);
+    input.value = "";
+    showToast("🗑 Cleared input");
+}
+</script>
+
+</body>
+</html>

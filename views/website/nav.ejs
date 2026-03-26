@@ -1,0 +1,154 @@
+<!-- navbar.ejs -->
+<!-- Font Awesome CDN -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-pap+8Oa1kj+qXj5+gFv4zq+N5+3Hd/9rZg/sB9Z1akxTLkK9I8b+9HwVcP/5S3qvXl7b1j6T3/k8V6cXuwuT0A=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+<nav class="navbar">
+  <div class="navbar-container">
+    <a href="/" class="logo">Bangla Group</a>
+    <button class="menu-toggle" id="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/" class="active"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+    </ul>
+  </div>
+</nav>
+<br/>
+<br/>
+<br/>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 0.6rem 1rem;
+  }
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.8rem;
+  }
+
+  .nav-links li a {
+    text-decoration: none;
+    color: #2c3e50;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 500;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .nav-links li a i {
+    font-size: 1rem;
+  }
+
+  /* Hover underline */
+  .nav-links li a::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background: #f1c40f;
+    left: 0;
+    bottom: -2px;
+    transition: 0.3s;
+    border-radius: 2px;
+  }
+
+  .nav-links li a:hover::after,
+  .nav-links li a.active::after {
+    width: 100%;
+  }
+
+  /* Hamburger menu */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #2c3e50;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .nav-links {
+      position: absolute;
+      top: 60px;
+      right: 1rem;
+      background: white;
+      flex-direction: column;
+      width: 200px;
+      padding: 1rem;
+      border-radius: 10px;
+      display: none;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .nav-links.show {
+      display: flex;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+</script>

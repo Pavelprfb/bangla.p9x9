@@ -1,0 +1,97 @@
+<!-- 404.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found - Bangla Group</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pap+8Oa1kj+qXj5+gFv4zq+N5+3Hd/9rZg/sB9Z1akxTLkK9I8b+9HwVcP/5S3qvXl7b1j6T3/k8V6cXuwuT0A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: #f8f9fa;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .error-container {
+      max-width: 600px;
+    }
+
+    .error-code {
+      font-size: 6rem;
+      font-weight: 700;
+      color: #f1c40f;
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .error-desc {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+
+    .error-actions a {
+      text-decoration: none;
+      background-color: #2c3e50;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .error-actions a:hover {
+      background-color: #f1c40f;
+      color: #2c3e50;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 480px) {
+      .error-code {
+        font-size: 4rem;
+      }
+      .error-message {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+<%- include("website/nav.ejs") %>
+  <div class="error-container">
+    <div class="error-code">404</div>
+    <div class="error-message"><i class="fas fa-exclamation-triangle"></i> Page Not Found</div>
+    <div class="error-desc">Sorry, the page you are looking for does not exist or has been moved.</div>
+    <div class="error-actions">
+      <a href="/"><i class="fas fa-arrow-left"></i> Go Back Home</a>
+    </div>
+  </div>
+  
+<%- include("video/randomVideo.ejs") %>
+<%- include("website/footer.ejs") %>
+</body>
+</html>

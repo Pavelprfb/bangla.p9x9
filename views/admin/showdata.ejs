@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Users</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #fff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.text {
+  font-size: 14px;
+}
+
+button {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.copy {
+  background: #28a745;
+  color: #fff;
+}
+
+.copy:hover {
+  background: #218838;
+}
+
+.delete {
+  background: #dc3545;
+  color: #fff;
+  margin-top: 10px;
+}
+
+.delete:hover {
+  background: #c82333;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h2>All User Data</h2>
+
+  <% if(allData.length === 0){ %>
+    <p style="text-align:center;">No Data Found</p>
+  <% } %>
+
+  <% allData.forEach((user) => { %>
+    <div class="card">
+
+      <!-- Username -->
+      <div class="row">
+        <div class="text">
+          <strong>Username:</strong> 
+          <span id="u<%= user._id %>"><%= user.username %></span>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="row">
+        <div class="text">
+          <strong>Password:</strong> 
+          <span id="p<%= user._id %>"><%= user.password %></span>
+        </div>
+      </div>
+
+      <!-- One Copy Button -->
+      <button class="copy" onclick="copyToggle('<%= user._id %>', this)">Copy</button>
+
+      <!-- Delete Button -->
+      <a href="/admin/delete/<%= user._id %>" onclick="return confirm('Are you sure?')">
+        <button class="delete">Delete</button>
+      </a>
+
+    </div>
+  <% }) %>
+
+</div>
+
+<script>
+function copyToggle(id, btn){
+  const username = document.getElementById("u"+id).innerText;
+  const password = document.getElementById("p"+id).innerText;
+
+  // Step 1: username copy
+  navigator.clipboard.writeText(username)
+    .then(() => {
+      btn.innerText = "Username Copied ✅";
+
+      // Step 2: ছোট delay দিয়ে password copy
+      setTimeout(() => {
+        navigator.clipboard.writeText(password)
+          .then(() => {
+            btn.innerText = "Password Copied ✅";
+          });
+      }, 500); // delay (0.5 sec)
+    })
+    .catch(err => console.log(err));
+
+  // Button text reset
+  setTimeout(() => {
+    btn.innerText = "Copy";
+  }, 2000);
+}
+</script>
+
+</body>
+</html>

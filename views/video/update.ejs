@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Video</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color:#fff;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:30px;
+  font-weight:600;
+}
+
+.container{
+  max-width:700px;
+  margin:0 auto;
+}
+
+.card{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  padding:20px;
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-bottom:15px;
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.form-group{
+  margin-bottom:15px;
+}
+
+label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:500;
+}
+
+.input-wrapper{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+input{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color:#fff;
+  font-size:14px;
+}
+
+input:focus{
+  outline:none;
+  border-color:#00c6ff;
+}
+
+.input-btn{
+  display:flex;
+  gap:6px;
+}
+
+.input-btn button{
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+  flex-shrink:0;
+}
+
+.copy-btn{ background: #4CAF50; color:#fff; }
+.copy-btn:hover{ background:#3b8a40; }
+
+.paste-btn{ background: #ffa726; color:#fff; }
+.paste-btn:hover{ background:#fb8c00; }
+
+.clear-btn{ background: #ff4141; color:#fff; }
+.clear-btn:hover{ background:#d70000; }
+
+button[type="submit"]{
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+  border:none;
+  border-radius:8px;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button[type="submit"]:hover{
+  transform:scale(1.03);
+  box-shadow:0 5px 15px rgba(0,114,255,0.4);
+}
+
+/* Toast Popup */
+#toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color:#fff;
+  padding:10px 18px;
+  border-radius:6px;
+  opacity:0;
+  pointer-events:none;
+  transition:0.5s;
+  z-index:9999;
+  font-weight:500;
+}
+
+/* Responsive */
+@media(max-width:480px){
+  .input-wrapper{
+    flex-direction:column;
+  }
+
+  .input-btn{
+    flex-wrap:wrap;
+    gap:4px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Update Video</h1>
+
+<div class="container">
+  <div class="card">
+    <h2><%= data.title %></h2>
+    <img src="<%= data.imageLink %>" alt="<%= data.title %>">
+
+    <form action="/video/update/<%= data.routeName %>" method="post">
+
+      <div class="form-group">
+        <label>Route Name</label>
+        <div class="input-wrapper">
+          <input type="text" id="routeName" name="routeName" value="<%= data.routeName %>">
+          <div class="input-btn">
+            <button type="button" class="copy-btn" onclick="copyInput('routeName')">Copy</button>
+            <button type="button" class="paste-btn" onclick="pasteInput('routeName')">Paste</button>
+            <button type="button" class="clear-btn" onclick="clearInput('routeName')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Title</label>
+        <div class="input-wrapper">
+          <input type="text" id="title" name="title" value="<%= data.title %>">
+          <div class="input-btn">
+            <button type="button" class="copy-btn" onclick="copyInput('title')">Copy</button>
+            <button type="button" class="paste-btn" onclick="pasteInput('title')">Paste</button>
+            <button type="button" class="clear-btn" onclick="clearInput('title')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Image Link</label>
+        <div class="input-wrapper">
+          <input type="text" id="imageLink" name="imageLink" value="<%= data.imageLink %>">
+          <div class="input-btn">
+            <button type="button" class="copy-btn" onclick="copyInput('imageLink')">Copy</button>
+            <button type="button" class="paste-btn" onclick="pasteInput('imageLink')">Paste</button>
+            <button type="button" class="clear-btn" onclick="clearInput('imageLink')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Video Link</label>
+        <div class="input-wrapper">
+          <input type="text" id="videoLink" name="videoLink" value="<%= data.videoLink %>">
+          <div class="input-btn">
+            <button type="button" class="copy-btn" onclick="copyInput('videoLink')">Copy</button>
+            <button type="button" class="paste-btn" onclick="pasteInput('videoLink')">Paste</button>
+            <button type="button" class="clear-btn" onclick="clearInput('videoLink')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit">Update Video</button>
+
+    </form>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.style.opacity = '1';
+  setTimeout(()=>{ toast.style.opacity = '0'; }, 2500);
+}
+
+function copyInput(id){
+    const input = document.getElementById(id);
+    input.select();
+    input.setSelectionRange(0,99999);
+    navigator.clipboard.writeText(input.value);
+    showToast("✅ Copied: " + input.value);
+}
+
+async function pasteInput(id){
+    const input = document.getElementById(id);
+    try{
+      const text = await navigator.clipboard.readText();
+      input.value = text;
+      showToast("📋 Pasted: " + text);
+    }catch(e){
+      showToast("❌ Unable to paste!");
+    }
+}
+
+function clearInput(id){
+    const input = document.getElementById(id);
+    input.value = "";
+    showToast("🗑 Cleared input");
+}
+</script>
+
+</body>
+</html>
