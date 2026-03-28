@@ -12,6 +12,7 @@ const userRoutes = require("./routes/userRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const videoRoute = require("./routes/videoRoute");
 const adminRoute = require("./routes/adminRoute");
+const customUserRoute = require("./routes/customUserRoute");
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/", userRoutes);
 app.use("/", notificationRoutes);
 app.use("/video", videoRoute);
 app.use("/admin", adminRoute);
+app.use("/user", customUserRoute);
 
 
 // 404 Page - catch all other routes

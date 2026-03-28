@@ -1,0 +1,371 @@
+  <html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>Document</title>
+      <style>
+          /* =========================
+             Global Styles
+          ========================= */
+          * {
+            padding: 0;
+            margin: 0;
+            font-family: Sans-Serif;
+            box-sizing: border-box;
+          }
+          
+          /* =========================
+             User Dashboard
+          ========================= */
+          .userDashboard {
+            text-align: center;
+          }
+          
+          /* =========================
+             Profile Section
+          ========================= */
+          /* =========================
+             Profile Card
+          ========================= */
+          .profileDiv {
+            width: 320px;
+            margin: 30px auto;
+            padding: 25px 20px 40px 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+          }
+          
+          .profileDiv:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+          }
+          
+          .profileImageWrapper {
+            position: relative;
+            display: inline-block;
+          }
+          
+          .profileDiv img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #062cd9;
+            transition: transform 0.3s;
+          }
+          
+          .profileDiv img:hover {
+            transform: scale(1.05);
+          }
+          
+          .coin {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            background: #ffcc00;
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            font-size: 14px;
+          }
+          
+          .fullName {
+            margin: 20px 0 10px 0;
+            font-size: 22px;
+            color: #062cd9;
+            font-weight: 600;
+          }
+          
+          .userInfo p {
+            margin: 6px 0;
+            font-size: 15px;
+            color: #333;
+          }
+          
+          .userInfo span {
+            font-weight: bold;
+            color: #000;
+          }
+          
+          /* =========================
+             Withdraw & Buttons
+          ========================= */
+          .withdraw a,
+          .referShare,
+          .moreIncomeButton {
+            display: block;
+            margin: 20px auto;
+            text-decoration: none;
+            text-align: center;
+            background: black;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+          }
+          
+          /* =========================
+             Toast Notification
+          ========================= */
+          #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: none;
+            z-index: 9999;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          }
+          
+          /* =========================
+             Referral & Refer Data Section
+          ========================= */
+          .refers {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            margin: 20px auto;
+            box-shadow: 0 0 10px black;
+            border-radius: 10px;
+          }
+          
+          .refers > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          
+          .totalReferData {
+            margin: auto;
+          }
+          
+          .totalReferData img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 5px;
+          }
+          
+          /* =========================
+             Referral Card
+          ========================= */
+          .referral-card {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #ffcc00;
+            border-radius: 12px;
+            background: #fff8e1;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          }
+          
+          .referral-header {
+            font-size: 24px;
+            margin-bottom: 10px;
+          }
+          
+          .referral-bonus {
+            font-size: 18px;
+            margin-bottom: 20px;
+          }
+          
+          .referral-cta {
+            font-size: 16px;
+            margin-bottom: 20px;
+          }
+          
+          .referral-link-wrapper {
+            margin-bottom: 20px;
+          }
+          
+          .referral-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ffcc00;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            background-color: #fff8e1;
+          }
+          
+          .referral-btn {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+          }
+          
+          .referral-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+          }
+          
+          /* =========================
+             Secondary Section
+          ========================= */
+          .secondDiv-486 {
+            padding: 30px;
+          }
+      </style>
+  </head>
+  <body>
+      <%- include("../website/nav.ejs") %>
+      <h2 class="userDashboard">User Dashboard</h2>
+      
+      <!-- Toast container -->
+      <div id="toast" style="display:none;"></div>
+    
+      <% if (userData) { %>
+        <div id="userDataFound">
+          <div class="profileDiv">
+              <div class="profileImageWrapper">
+                  <img src="<%= userData.profilePic %>" alt="Profile Picture">
+                  <p class="coin"><span><%= userData.coin %></span> টাকা</p>
+              </div>
+              <h3 class="fullName"><%= userData.fullName %></h3>
+              <div class="userInfo">
+                  <p>Username: <span><%= userData.username %></span></p>
+                  <p>Email: <span><%= userData.email %></span></p>
+                  <p>Number: <span><%= userData.number %></span></p>
+                  <p>Age: <span><%= userData.age %></span></p>
+              </div>
+        </div>
+          <div class="secondDiv-486">
+              <!-- Withdraw Section -->
+              <div class="withdraw">
+                <p>✅ উত্তোলনযোগ্য ব্যালেন্স: <span id="coinDisplay">২০০</span> টাকা</p>
+                <span id="myCoin" style="display:none;"><%= userData.coin %></span>
+                <a href="/user/withdraw" id="withdrawLink">Withdraw</a>
+              </div>
+        
+              <!-- Referral Section -->
+              <div class="referral-card">
+                  <h2 class="referral-header">💸 পটি রেফার করুন – উপার্জন করুন! 💸</h2>
+                  <p class="referral-bonus">✅ প্রতি রেফার করলে আপনি পাবেন <strong>৫ টাকা</strong> 💰</p>
+                  <p class="referral-cta">🎯 বন্ধুরা রেফার করুন, বেশি আয় করুন!</p>
+                  <div class="referral-link-wrapper">
+                      <input type="text" readonly id="referInput" class="referral-input">
+                  </div>
+                  <button id="copyButton" class="referral-btn">🔗 Copy & Share</button>
+                  <br/><br/>
+                  <button id="onlieShareButton" class="referral-btn">🔗 Online & Share</button>
+                  <p class="referral-footer">
+                    ✨ সহজ • দ্রুত • নিয়মিত উপার্জন<br/>
+                    🔥 মিস করবেন না!
+                  </p>
+                  <!-- Hidden referral code -->
+                  <span id="referCode" style="display:none;"><%= userData.referCode %></span>
+                  <p>Total Refers: <span><%= userData.refers.length %></span></p>
+          
+                  <div class="totalReferData">
+                      <% referredUsers.forEach(function(data) { %>
+                        <div class="refers">
+                            <div class="referDataImgAndName">
+                                <img src="<%= data.profilePic %>" alt="Profile Picture" />
+                                <h3><%= data.fullName %></h3>
+                            </div>
+                            <div>
+                                <span><%= data.coin %></span>
+                                <p>টাকা</p>
+                            </div>
+                            <div>
+                                <span>৫</span>
+                                <p>পেয়েছেন।</p>
+                            </div>
+                        </div>
+                      <% }) %>
+            
+                      <div class="moreIncome">
+                        <a href="/user/task" class="moreIncomeButton">আরও আয় করুন।</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+    
+        </div>
+    
+      <% } else { %>
+        <div id="userDataNotFound">
+          <a href="/user/signup" id="signup">Sign Up</a>
+          <a href="/user/login" id="login">Login</a>
+        </div>
+      <% } %>
+    
+      <!-- Scripts -->
+      <script>
+        const referInput = document.getElementById("referInput");
+        const referCode = document.getElementById("referCode");
+        const fullLink = `${window.location.origin}/user/signup?refer=${referCode ? referCode.innerText : ''}`;
+        
+        if (referInput) referInput.value = fullLink;
+    
+        // Copy referral link
+        document.getElementById("copyButton")?.addEventListener("click", () => {
+          navigator.clipboard.writeText(fullLink)
+            .then(() => showToast("Refer link copied! Share now: " + fullLink))
+            .catch(() => showToast("Failed to copy link."));
+        });
+    
+        // Online share
+        document.getElementById("onlieShareButton")?.addEventListener("click", async () => {
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: "Join & Earn!",
+                text: "💸 আমার রেফার লিঙ্ক দিয়ে সাইনআপ করুন এবং উপার্জন করুন!",
+                url: fullLink,
+              });
+              console.log("Link shared successfully!");
+            } catch (err) {
+              console.error("Error sharing:", err);
+            }
+          } else {
+            alert("Your browser does not support direct sharing. Copy this link: " + fullLink);
+          }
+        });
+    
+        // Withdraw validation
+        const withdrawLink = document.getElementById("withdrawLink");
+        const coin = parseInt(document.getElementById("myCoin")?.innerText || 0);
+        withdrawLink?.addEventListener("click", function(e) {
+          const minimumWithdraw = 200;
+          if (coin < minimumWithdraw) {
+            e.preventDefault();
+            showToast("⚠️ আপনার ব্যালেন্স ২০০ টাকার চেয়ে কম। আপনি টাকা উত্তোলন করতে পারবেননা।");
+          }
+        });
+    
+        // Toast function
+        function showToast(message) {
+          const toast = document.getElementById("toast");
+          toast.innerText = message;
+          toast.style.display = "block";
+          setTimeout(() => toast.style.display = "none", 3000);
+        }
+      </script>
+    
+      <%- include("../website/footer.ejs") %>
+      <%- include("../website/footerNav.ejs") %>
+  </body>
+  </html>

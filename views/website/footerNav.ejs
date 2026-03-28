@@ -1,0 +1,119 @@
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      font-family: Sans-Serif;
+      box-sizing: border-box;
+    }
+
+    .body48h8{
+      min-height: 200vh;
+    }
+
+    .footerNav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #111;
+      border-top: 1px solid #333;
+    }
+
+    .footerNav ul {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      list-style: none;
+    }
+
+    .footerNav li {
+      text-align: center;
+      font-size: 13px;
+      flex: 1;
+    }
+
+    .footerNav a {
+      text-decoration: none;
+      color: #aaa;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .footerNav a:hover {
+      color: #fff;
+    }
+
+    .footerNav li.active a {
+      color: #00ffcc;
+    }
+
+    .footerNav i {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+  </style>
+
+
+ 
+  <!-- Footer Navigation -->
+  <div class="footerNav">
+    <ul>
+      <li class="active">
+        <a href="/">
+          <i class="fa-solid fa-house"></i>
+          <p>Home</p>
+        </a>
+      </li>
+
+      <li>
+        <a href="/user/task">
+          <i class="fa-solid fa-list-check"></i>
+          <p>Task</p>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/user/leaderboard">
+          <i class="fa-solid fa-trophy"></i>
+          <p>Leaderboard</p>
+        </a>
+      </li>
+
+      <li>
+        <a href="/user/dashboard">
+          <i class="fa-solid fa-user"></i>
+          <p>Account</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+<script>
+  const items = document.querySelectorAll(".footerNav li");
+
+  // Preserve click-based toggle
+  items.forEach(item => {
+    item.addEventListener("click", () => {
+      document.querySelector(".footerNav .active").classList.remove("active");
+      item.classList.add("active");
+    });
+  });
+
+  // -----------------------------
+  // URL-based active detection
+  // -----------------------------
+  const currentPath = window.location.pathname; // ignore query params
+  items.forEach(item => {
+    const link = item.querySelector("a").getAttribute("href");
+
+    // Check if currentPath starts with link
+    if (currentPath === link || currentPath.startsWith(link + "/")) {
+      document.querySelector(".footerNav .active").classList.remove("active");
+      item.classList.add("active");
+    }
+  });
+</script>

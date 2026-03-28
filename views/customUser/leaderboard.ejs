@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+
+    .container-4947 {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 30px;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #ffcc00;
+      font-weight: bold;
+    }
+
+    .user-card {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+  </style>
+</head>
+<body>
+    <%- include("../website/nav.ejs") %>
+    <div class="container-4947">
+        <h2 style="text-align:center;">🏆 Leaderboard</h2>
+        <!-- Buttons -->
+        <div class="buttons">
+            <button onclick="sortByCoin()">💰 Top Income</button>
+            <button onclick="sortByRefer()">👥 Top Refer</button>
+        </div>
+        
+        <!-- User List -->
+        <div id="userList">
+            <% if(allUsers && allUsers.length > 0){ %>
+                <% allUsers.forEach(function(user){ %>
+                    <div class="user-card" data-coin="<%= user.coin || 0 %>" data-refer="<%= user.refers ? user.refers.length : 0 %>">
+                        <div class="left">
+                            <img src="<%= user.profilePic %>" />
+                            <div>
+                                <h4><%= user.fullName %></h4>
+                                <p>👥 Refer: <%= user.refers ? user.refers.length : 0 %></p>
+                            </div>
+                        </div>
+                        <div>
+                            💰 <%= user.coin || 0 %> টাকা
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p style="text-align:center;">No users found</p>
+            <% } %>
+        </div>
+    </div>
+    
+    <script>
+    function sortByCoin() {
+      const container = document.getElementById("userList");
+      const users = Array.from(container.children);
+    
+      users.sort((a, b) => {
+        return parseInt(b.dataset.coin) - parseInt(a.dataset.coin);
+      });
+    
+      container.innerHTML = "";
+      users.forEach(el => container.appendChild(el));
+    }
+    
+    function sortByRefer() {
+      const container = document.getElementById("userList");
+      const users = Array.from(container.children);
+    
+      users.sort((a, b) => {
+        return parseInt(b.dataset.refer) - parseInt(a.dataset.refer);
+      });
+    
+      container.innerHTML = "";
+      users.forEach(el => container.appendChild(el));
+    }
+    </script>
+    
+    
+    <%- include("../website/footer.ejs") %>
+    <%- include("../website/footerNav.ejs") %>
+</body>
+</html>
