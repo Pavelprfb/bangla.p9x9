@@ -59,6 +59,13 @@
     .dNone{
       display: none;
     }
+    .displayDiv > button{
+      border: none;
+      padding: 10px 10px;
+      background: #062cd9;
+      color: white;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -73,24 +80,23 @@
           <% } else { %>
           
           
-              <% taskData.forEach(function(data) { %>      
+              <% taskData.forEach(function(data, index) { %>      
                 <div class="taskDataContainer">      
                   <div class="taskPic">      
                     <img src="<%= data.taskPic %>" />      
                   </div>      
                   <div class="taskNameAndCoin">      
                     <p><%= data.fullName %></p>      
-                    <p><%= data.coin %></p>      
+                    <p><%= data.coin %> টাকা</p>      
                   </div>      
                   <div class="joinAndCleam">      
-                    <!--- <%= data.email %>  <%= email %>-->      
                     <div class="show">
-                      <span id="dataId" class="dNone"><%= data.id %></span>
-                      <span id="dataCoin" class="dNone"><%= data.coin %></span>
-                      <span id="dataLink" class="dNone"><%= data.link %></span>
-                      <span id="dataEmail" class="dNone"><%= data.email %></span>
-                      <span id="onlyEmail" class="dNone"><%= email %></span>
-                      <div id="displayDiv">Join</div>      
+                      <span class="dataId dNone"><%= data.id %></span>
+                      <span class="dataCoin dNone"><%= data.coin %></span>
+                      <span class="dataLink dNone"><%= data.link %></span>
+                      <span class="dataEmail dNone"><%= data.email %></span>
+                      <span class="onlyEmail dNone"><%= email %></span>
+                      <div class="displayDiv">Join</div>      
                     </div>     
                   </div>      
                 </div>      
@@ -110,43 +116,48 @@
     
     
     <script>
-      const dataId = document.getElementById('dataId');
-      const dataCoin = document.getElementById('dataCoin');
-      const dataLink = document.getElementById('dataLink');
-      const dataEmail = document.getElementById('dataEmail');
-      const onlyEmail = document.getElementById('onlyEmail');
-      const displayDiv = document.getElementById('displayDiv');
-      
-      const singleId = dataId.innerHTML.trim();
-      const singleCoin = dataCoin.innerHTML.trim();
-      const multipleEmail = dataEmail.innerHTML.trim();
-      const singleEmail = onlyEmail.innerHTML.trim();
-      
-        if (multipleEmail.includes(singleEmail)) {
-          displayDiv.innerHTML = `<button>Cleamed</button>`
+      // সব এলিমেন্টগুলোর জন্য NodeList নিন
+      const taskContainers = document.querySelectorAll('.taskDataContainer');
+    
+      taskContainers.forEach(container => {
+        const dataId = container.querySelector('.dataId').innerHTML.trim();
+        const dataCoin = container.querySelector('.dataCoin').innerHTML.trim();
+        const dataLink = container.querySelector('.dataLink').innerHTML.trim();
+        const dataEmail = container.querySelector('.dataEmail').innerHTML.trim();
+        const onlyEmail = container.querySelector('.onlyEmail').innerHTML.trim();
+        const displayDiv = container.querySelector('.displayDiv');
+    
+        const singleId = dataId;
+        const singleCoin = dataCoin;
+        const multipleEmail = dataEmail;
+        const singleEmailVal = onlyEmail;
+    
+        // যদি multipleEmail এ singleEmail থাকে
+        if (multipleEmail.includes(singleEmailVal)) {
+          displayDiv.innerHTML = `<button>✅ Claimed</button>`;
         } else {
-          displayDiv.innerHTML = `<button onclick=(buttonClick(event))>Join</button>`
+          displayDiv.innerHTML = `<button>Join</button>`;
         }
-        
-        const buttonClick = (event) => {
+    
+        // বাটনে click ইভেন্ট
+        displayDiv.querySelector('button')?.addEventListener('click', (event) => {
           if (event.target.innerHTML == "Join") {
-            document.cookie = "name=clicked; max-age=300";
-        
+            document.cookie = "name=Cleam; max-age=300";
+    
             setTimeout(() => {
-              window.location.href = dataLink.innerHTML;
+              window.location.href = dataLink;
             }, 1000);
-        
+    
             setTimeout(() => {
               event.target.innerHTML = "Cleam";
             }, 3000);
           } else {
-            // Data to send
             const payload = {
               singleId: singleId,
               singleCoin: singleCoin,
-              singleEmail: singleEmail
+              singleEmail: singleEmailVal
             };
-        
+    
             fetch('/admin/task/calculate', {
               method: 'POST',
               headers: {
@@ -156,23 +167,23 @@
             })
             .then(response => response.json())
             .then(data => {
-              console.log('Server response:', data);
-              alert("Data sent successfully!");
+              window.location.reload();
             })
             .catch(error => {
               console.error('Error sending data:', error);
               alert("Error sending data!");
             });
           }
-        };
-        
-        function getCookie(name) {
-          const cookies = document.cookie.split("; ");
-          for (let cookie of cookies) {
-              const [key, value] = cookie.split("=");
-              if (key === name) return value;
-          }
-          return null;
+        });
+      });
+    
+      function getCookie(name) {
+        const cookies = document.cookie.split("; ");
+        for (let cookie of cookies) {
+          const [key, value] = cookie.split("=");
+          if (key === name) return value;
+        }
+        return null;
       }
     </script>
     <%- include("../website/footer.ejs") %>

@@ -67,7 +67,7 @@ const CustomUserSchema = new mongoose.Schema({
   },
   
   coin: {
-    type: String,
+    type: Number,
     default: 5 
   },
   
