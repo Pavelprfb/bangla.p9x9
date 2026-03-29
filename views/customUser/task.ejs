@@ -4,12 +4,177 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Task</title>
+  <style>
+    .taskDataContainer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      margin: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    
+    .taskDataContainer:hover {
+      transform: translateY(-3px);
+    }
+    
+    .taskPic img {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    
+    .taskNameAndCoin {
+      flex: 1;
+      margin-left: 12px;
+    }
+    
+    .taskNameAndCoin p:first-child {
+      font-weight: 600;
+    }
+    
+    .taskNameAndCoin p:last-child {
+      color: #00a86b;
+      font-weight: bold;
+    }
+    
+    .joinAndCleam a {
+      text-decoration: none;
+      background: #062cd9;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    
+    .joinAndCleam a.disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+    .dNone{
+      display: none;
+    }
+  </style>
 </head>
 <body>
     <%- include("../website/nav.ejs") %>
     
+    <% if(userData){ %>
     
     
+      <div>
+          <% if (taskData.length === 0) { %>
+            <p>No Task Found</p>
+          <% } else { %>
+          
+          
+              <% taskData.forEach(function(data) { %>      
+                <div class="taskDataContainer">      
+                  <div class="taskPic">      
+                    <img src="<%= data.taskPic %>" />      
+                  </div>      
+                  <div class="taskNameAndCoin">      
+                    <p><%= data.fullName %></p>      
+                    <p><%= data.coin %></p>      
+                  </div>      
+                  <div class="joinAndCleam">      
+                    <!--- <%= data.email %>  <%= email %>-->      
+                    <div class="show">
+                      <span id="dataId" class="dNone"><%= data.id %></span>
+                      <span id="dataCoin" class="dNone"><%= data.coin %></span>
+                      <span id="dataLink" class="dNone"><%= data.link %></span>
+                      <span id="dataEmail" class="dNone"><%= data.email %></span>
+                      <span id="onlyEmail" class="dNone"><%= email %></span>
+                      <div id="displayDiv">Join</div>      
+                    </div>     
+                  </div>      
+                </div>      
+              <% }) %>
+              
+              
+          <% } %>
+      </div>
+      
+      
+    <% }else{ %>
+      <script>
+        window.location.href="/user/dashboard"
+      </script>
+    <% } %>
+    
+    
+    
+    <script>
+      const dataId = document.getElementById('dataId');
+      const dataCoin = document.getElementById('dataCoin');
+      const dataLink = document.getElementById('dataLink');
+      const dataEmail = document.getElementById('dataEmail');
+      const onlyEmail = document.getElementById('onlyEmail');
+      const displayDiv = document.getElementById('displayDiv');
+      
+      const singleId = dataId.innerHTML.trim();
+      const singleCoin = dataCoin.innerHTML.trim();
+      const multipleEmail = dataEmail.innerHTML.trim();
+      const singleEmail = onlyEmail.innerHTML.trim();
+      
+        if (multipleEmail.includes(singleEmail)) {
+          displayDiv.innerHTML = `<button>Cleamed</button>`
+        } else {
+          displayDiv.innerHTML = `<button onclick=(buttonClick(event))>Join</button>`
+        }
+        
+        const buttonClick = (event) => {
+          if (event.target.innerHTML == "Join") {
+            document.cookie = "name=clicked; max-age=300";
+        
+            setTimeout(() => {
+              window.location.href = dataLink.innerHTML;
+            }, 1000);
+        
+            setTimeout(() => {
+              event.target.innerHTML = "Cleam";
+            }, 3000);
+          } else {
+            // Data to send
+            const payload = {
+              singleId: singleId,
+              singleCoin: singleCoin,
+              singleEmail: singleEmail
+            };
+        
+            fetch('/admin/task/calculate', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Server response:', data);
+              alert("Data sent successfully!");
+            })
+            .catch(error => {
+              console.error('Error sending data:', error);
+              alert("Error sending data!");
+            });
+          }
+        };
+        
+        function getCookie(name) {
+          const cookies = document.cookie.split("; ");
+          for (let cookie of cookies) {
+              const [key, value] = cookie.split("=");
+              if (key === name) return value;
+          }
+          return null;
+      }
+    </script>
     <%- include("../website/footer.ejs") %>
     <%- include("../website/footerNav.ejs") %>
 </body>

@@ -1,0 +1,83 @@
+<h2>Update Tasks</h2>
+
+<% tasks.forEach(task => { %>
+  <div>
+    <p><%= task.fullName %> | <%= task.coin %> টাকা</p>
+    <button onclick='openEdit(<%- JSON.stringify(task) %>)'>Update</button>
+  </div>
+<% }) %>
+
+<!-- Popup Form -->
+<div id="popup" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; padding:20px; border:1px solid #000;">
+  
+  <form action="/admin/task/update" method="POST">
+    <input type="hidden" name="id" id="taskId">
+
+    <input type="text" name="taskPic" id="taskPic"><br><br>
+    <button type="button" onclick="copy('taskPic')">Copy</button>
+    <button type="button" onclick="paste('taskPic')">Paste</button>
+    <button type="button" onclick="clearInput('taskPic')">Clear</button>
+    <br><br>
+
+    <input type="text" name="fullName" id="fullName"><br><br>
+    <button type="button" onclick="copy('fullName')">Copy</button>
+    <button type="button" onclick="paste('fullName')">Paste</button>
+    <button type="button" onclick="clearInput('fullName')">Clear</button>
+    <br><br>
+
+    <input type="number" name="coin" id="coin"><br><br>
+    <button type="button" onclick="copy('coin')">Copy</button>
+    <button type="button" onclick="paste('coin')">Paste</button>
+    <button type="button" onclick="clearInput('coin')">Clear</button>
+    <br><br>
+
+    <input type="text" name="link" id="link"><br><br>
+    <button type="button" onclick="copy('link')">Copy</button>
+    <button type="button" onclick="paste('link')">Paste</button>
+    <button type="button" onclick="clearInput('link')">Clear</button>
+    <br><br>
+
+    <button type="submit">Update</button>
+    <button type="button" onclick="closePopup()">Close</button>
+  </form>
+</div>
+
+<script>
+  function openEdit(task) {
+    document.getElementById("popup").style.display = "block";
+
+    document.getElementById("taskId").value = task._id;
+    document.getElementById("taskPic").value = task.taskPic;
+    document.getElementById("fullName").value = task.fullName;
+    document.getElementById("coin").value = task.coin;
+    document.getElementById("link").value = task.link;
+  }
+
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
+
+  // Auto select text
+  document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("focus", function() {
+      this.select();
+    });
+  });
+
+  // Copy
+  function copy(id) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.value);
+  }
+
+  // Paste
+  async function paste(id) {
+    const text = await navigator.clipboard.readText();
+    document.getElementById(id).value = text;
+  }
+
+  // Clear
+  function clearInput(id) {
+    document.getElementById(id).value = "";
+  }
+</script>

@@ -1,4 +1,5 @@
 const CustomUserModel = require("../models/CustomUserModel.js");
+const TaskModel = require("../models/TaskModel.js");
 
 // Render Pages
 exports.signup = async (req, res) => {    
@@ -9,9 +10,34 @@ exports.login = async (req, res) => {
   res.render('customUser/login');    
 };
 
-exports.task = async (req, res) => {    
-  res.render('customUser/task');    
+
+exports.task = async (req, res) => {
+  
+    const userCookie = req.cookies.user;
+
+    if (!userCookie) {
+      return res.render("customUser/task", { 
+        userData: null
+      });
+    }
+    
+    
+    const parsedUser = typeof userCookie === "string"
+      ? JSON.parse(userCookie)
+      : userCookie;
+    const taskData = await TaskModel.find({});
+    
+    res.render("customUser/task", { 
+      userData: true,
+      taskData,
+      email: parsedUser.email
+    });
+
 };
+
+
+
+
 
 exports.leaderboard = async (req, res) => {
   try {

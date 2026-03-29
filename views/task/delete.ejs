@@ -1,0 +1,18 @@
+<h2>Delete Tasks</h2>
+
+<% tasks.forEach(task => { %>
+  <div>
+    <p><%= task.fullName %> | <%= task.coin %> টাকা</p>
+
+    <form action="/admin/task/delete" method="POST" onsubmit="return confirmDelete()">
+      <input type="hidden" name="id" value="<%= task._id %>">
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+<% }) %>
+
+<script>
+  function confirmDelete() {
+    return confirm("আপনি কি নিশ্চিত এই task delete করতে চান?");
+  }
+</script>

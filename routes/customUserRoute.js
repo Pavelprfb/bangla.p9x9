@@ -20,7 +20,7 @@ const upload = multer({ storage });
 // Page routes
 router.get("/login", redirectIfLoggedIn, CUC.login);
 router.get("/signup", redirectIfLoggedIn, CUC.signup);
-router.get("/task", checkUserAuth, CUC.task);
+router.get("/task", CUC.task);
 router.get("/dashboard", CUC.dashboard);
 router.get("/leaderboard", CUC.leaderboard);
 
