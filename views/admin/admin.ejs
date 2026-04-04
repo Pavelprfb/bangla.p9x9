@@ -1,5 +1,84 @@
-<a href="/video/create">create</a>
-<a href="/video/update">update</a>
-<a href="/video/delete">delete</a>
-<a href="/admin/notification">/admin/notification</a>
-<a href="/admin/showdata">/admin/showdata</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard Links</title>
+<style>
+.container{
+  font-family:'Segoe UI',sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  color:#fff;
+  padding:40px;
+}
+h2{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.links-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap:20px;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.link-card{
+  background: rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:12px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  transition:0.3s;
+}
+
+.link-card a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  display:block;
+  margin:8px 0;
+  padding:8px 0;
+  border-radius:6px;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  transition:0.3s;
+}
+
+.link-card a:hover{
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,198,255,0.4);
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Admin Dashboard Links</h2>
+    <div class="links-grid">
+    
+      <div class="link-card">
+        <a href="/video/create">Video Create</a>
+        <a href="/video/update">Video Update</a>
+        <a href="/video/delete">Video Delete</a>
+      </div>
+    
+      <div class="link-card">
+        <a href="/admin/notification">Send Notification</a>
+        <a href="/admin/showdata">Show Data</a>
+        <a href="/admin/custom_all_user">Custom All User</a>
+        <a href="/admin/allTask">All Tasks</a>
+      </div>
+    
+      <div class="link-card">
+        <a href="/admin/task/create">Task Create</a>
+        <a href="/admin/task/update">Task Update</a>
+        <a href="/admin/task/delete">Task Delete</a>
+      </div>
+    
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,4 +1,6 @@
 const adminModel = require("../models/adminModel");
+const CustomUserModel = require("../models/CustomUserModel");
+const TaskModel = require("../models/TaskModel");
 const User = require("../models/User");
 
 // Login Page
@@ -53,4 +55,69 @@ exports.deleteUser = async (req, res) => {
     console.log(err);
     res.send("Delete failed");
   }
+};
+exports.custom_all_user = async (req, res) => {
+  try {
+    const allUser = await CustomUserModel.find({});
+
+    // সব ইউজারের email-এর array বানানো
+    const emails = allUser.map(user => user.email);
+
+    // সব টাস্ক যা এই emails এ আছে
+    const allTask = await TaskModel.find({ email: { $in: emails } });
+
+    // এখন ইউজারের claimed সংখ্যা হিসাব করি
+    const usersWithClaimed = allUser.map(user => {
+      // প্রতিটি ইউজারের জন্য টাস্ক filter করি
+      const claimedTasks = allTask.filter(task => task.email.includes(user.email));
+      return {
+        ...user.toObject(),  // mongoose document কে plain object এ convert করা
+        claimed: claimedTasks.length
+      };
+    });
+
+    res.render("admin/custom_all_user", { allUser: usersWithClaimed });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+exports.userBan = async (req, res) => {
+  try {
+    const { _id, status, statusMessage } = req.body;
+
+    // Validation
+    if (!_id) {
+      return res.status(400).send("User ID required");
+    }
+
+    // String → Boolean convert (কারণ form থেকে string আসে)
+    const updatedStatus = status === "true";
+
+    // Update user
+    const updatedUser = await CustomUserModel.findByIdAndUpdate(
+      _id,
+      {
+        status: updatedStatus,
+        statusMessage: statusMessage || ""
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send("User not found");
+    }
+
+    // Redirect back
+      res.redirect("/admin/custom_all_user");
+
+  } catch (error) {
+    console.error("User Ban Error:", error);
+    res.status(500).send("Server Error");
+  }
+};
+exports.allTask = async (req, res) => {
+  const allData = await TaskModel.find({});
+  res.render("admin/allTask", {allData });
 };

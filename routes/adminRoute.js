@@ -9,7 +9,10 @@ const {
   adminPage,
   logoutAdmin,
   showData,
-  deleteUser
+  deleteUser,
+  custom_all_user,
+  userBan,
+  allTask
 } = require("../controllers/adminController");
 
 // Login Form
@@ -22,6 +25,9 @@ router.post("/login", loginAdmin);
 router.get("/logout", logoutAdmin);
 router.get("/showdata", showData);
 router.get("/delete/:id", deleteUser);
+router.get("/custom_all_user/", custom_all_user);
+router.post("/user/ban", userBan);
+router.get("/allTask", allTask);
 
 // Admin Dashboard (protected by middleware)
 router.get("/", adminAuth, adminPage);

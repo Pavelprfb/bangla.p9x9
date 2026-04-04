@@ -121,18 +121,7 @@ body, html {
 <%- include("../notification") %>
 <%- include("../notificationCard") %>
 
-<% if(user){ %>
-  <!-- User is logged in, show content -->
-<% } else { %>
-  <div id="indexContainer"></div>
 
-  <script>
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 3000); // ৩ সেকেন্ড পর redirect হবে
-  </script>
-
-<% } %>
 
 <div class="video-wrapper">
   <video

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Users</title>
+
+  <style>
+    .users-wrapper-x3 {
+      padding: 20px;
+      background: #f5f7fa;
+      min-height: 100vh;
+    }
+
+    .users-title-x3 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .top-btns-x3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .top-btns-x3 button {
+      margin: 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #4facfe;
+      color: #fff;
+    }
+
+    .users-grid-x3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card-x3 {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .user-img-x3 {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .badge-x3 {
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    .active-x3 { background: #d4edda; color: #155724; }
+    .inactive-x3 { background: #f8d7da; color: #721c24; }
+
+    .edit-btn-x3 {
+      margin-top: 10px;
+      padding: 6px 10px;
+      background: #ff9800;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Popup */
+    .popup-x3 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-content-x3 {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    .popup-content-x3 input,
+    .popup-content-x3 select {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="users-wrapper-x3">
+  <div class="users-title-x3">All Users</div>
+
+  <!-- Top Buttons -->
+  <div class="top-btns-x3">
+    <button onclick="sortByCoin()">Top User Coin</button>
+    <button onclick="sortByRefer()">Top Refer User</button>
+    <button onclick="sortByClaimed()">Top Task Claimed</button>
+  </div>
+
+  <div class="users-grid-x3" id="userContainer"></div>
+</div>
+
+<!-- Popup -->
+<div class="popup-x3" id="popup">
+  <div class="popup-content-x3">
+    <form action="/admin/user/ban" method="POST">
+      <input type="text" name="_id" id="userId" readonly>
+      
+      <select name="status" id="userStatus">
+        <option value="true">Active</option>
+        <option value="false">Ban</option>
+      </select>
+
+      <input type="text" name="statusMessage" id="statusMsg" placeholder="Message">
+
+      <button type="submit">Update</button>
+      <button type="button" onclick="closePopup()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let users = <%- JSON.stringify(allUser) %>;
+  const container = document.getElementById("userContainer");
+
+  function renderUsers(data) {
+    container.innerHTML = "";
+
+    data.forEach(user => {
+      container.innerHTML += `
+        <div class="user-card-x3">
+          <img src="${user.profilePic}" class="user-img-x3">
+
+          <h3>${user.fullName}</h3>
+          <p>@${user.username}</p>
+          
+          <div class="badge-x3 ${user.status ? 'active-x3':'inactive-x3'}">
+            ${user.status ? 'Active':'Banned'}
+          </div>
+
+          <p>Coin: ${user.coin}</p>
+          <p>Refer: ${user.refers.length}</p>
+          <p>Task Claimed: ${user.claimed || 0}</p>
+          
+          <button class="edit-btn-x3"
+            onclick="openPopup('${user._id}','${user.status}','${user.statusMessage || ''}')">
+            Edit
+          </button>
+        </div>
+      `;
+    });
+  }
+
+  // Sort functions
+  function sortByCoin() {
+    const sorted = [...users].sort((a,b)=> b.coin - a.coin);
+    renderUsers(sorted);
+  }
+
+  function sortByRefer() {
+    const sorted = [...users].sort((a,b)=> b.refers.length - a.refers.length);
+    renderUsers(sorted);
+  }
+
+  function sortByClaimed() {
+    const sorted = [...users].sort((a,b)=> (b.claimed || 0) - (a.claimed || 0));
+    renderUsers(sorted);
+  }
+
+  // Popup
+  function openPopup(id, status, msg) {
+    document.getElementById("popup").style.display = "flex";
+    document.getElementById("userId").value = id;
+    document.getElementById("userStatus").value = status;
+    document.getElementById("statusMsg").value = msg;
+  }
+
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
+
+  // Initial render
+  renderUsers(users);
+</script>
+
+</body>
+</html>

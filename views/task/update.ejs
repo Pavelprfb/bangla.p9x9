@@ -1,83 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Tasks</title>
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+body{ background: linear-gradient(135deg, #141e30, #243b55); color:#fff; padding:20px; }
+h2{ text-align:center; margin-bottom:30px; }
+
+.task-card{ 
+  background: rgba(255,255,255,0.05);
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+}
+
+.task-card button{
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  border:none;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.task-card button:hover{
+  transform: scale(1.05);
+  box-shadow:0 5px 15px rgba(0,114,255,0.4);
+}
+
+/* Popup */
+.popup{
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.5);
+  display:none;
+  align-items: center;
+  justify-content: center;
+  z-index:999;
+}
+
+.popup-content{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  padding:25px;
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,0.08);
+  max-width:400px;
+  width:90%;
+}
+
+.popup-content .form-group{ margin-bottom:15px; }
+.popup-content input{ 
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color:#fff;
+}
+
+.popup-content input:focus{ border-color:#00c6ff; outline:none; }
+
+.input-btn{
+  display:flex;
+  gap:6px;
+  margin-top:5px;
+}
+
+.input-btn button{
+  flex:1;
+  padding:8px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.copy-btn{ background:#4CAF50; color:#fff; }
+.copy-btn:hover{ background:#3b8a40; }
+
+.paste-btn{ background:#ffa726; color:#fff; }
+.paste-btn:hover{ background:#fb8c00; }
+
+.clear-btn{ background:#ff4141; color:#fff; }
+.clear-btn:hover{ background:#d70000; }
+
+button[type="submit"]{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+  margin-top:10px;
+}
+
+button[type="submit"]:hover{
+  transform:scale(1.03);
+  box-shadow:0 5px 15px rgba(0,114,255,0.4);
+}
+
+button.close-btn{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#ff4141;
+  color:#fff;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
 <h2>Update Tasks</h2>
 
 <% tasks.forEach(task => { %>
-  <div>
-    <p><%= task.fullName %> | <%= task.coin %> টাকা</p>
+  <div class="task-card">
+    <span><%= task.fullName %> | <%= task.coin %> Coin</span>
     <button onclick='openEdit(<%- JSON.stringify(task) %>)'>Update</button>
   </div>
 <% }) %>
 
-<!-- Popup Form -->
-<div id="popup" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; padding:20px; border:1px solid #000;">
-  
-  <form action="/admin/task/update" method="POST">
-    <input type="hidden" name="id" id="taskId">
+<!-- Popup -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <form action="/admin/task/update" method="POST">
+      <input type="hidden" name="id" id="taskId">
 
-    <input type="text" name="taskPic" id="taskPic"><br><br>
-    <button type="button" onclick="copy('taskPic')">Copy</button>
-    <button type="button" onclick="paste('taskPic')">Paste</button>
-    <button type="button" onclick="clearInput('taskPic')">Clear</button>
-    <br><br>
+      <div class="form-group">
+        <input type="text" name="taskPic" id="taskPic" placeholder="Task Image URL">
+        <div class="input-btn">
+          <button type="button" class="copy-btn" onclick="copy('taskPic')">Copy</button>
+          <button type="button" class="paste-btn" onclick="paste('taskPic')">Paste</button>
+          <button type="button" class="clear-btn" onclick="clearInput('taskPic')">Clear</button>
+        </div>
+      </div>
 
-    <input type="text" name="fullName" id="fullName"><br><br>
-    <button type="button" onclick="copy('fullName')">Copy</button>
-    <button type="button" onclick="paste('fullName')">Paste</button>
-    <button type="button" onclick="clearInput('fullName')">Clear</button>
-    <br><br>
+      <div class="form-group">
+        <input type="text" name="fullName" id="fullName" placeholder="Task Name">
+        <div class="input-btn">
+          <button type="button" class="copy-btn" onclick="copy('fullName')">Copy</button>
+          <button type="button" class="paste-btn" onclick="paste('fullName')">Paste</button>
+          <button type="button" class="clear-btn" onclick="clearInput('fullName')">Clear</button>
+        </div>
+      </div>
 
-    <input type="number" name="coin" id="coin"><br><br>
-    <button type="button" onclick="copy('coin')">Copy</button>
-    <button type="button" onclick="paste('coin')">Paste</button>
-    <button type="button" onclick="clearInput('coin')">Clear</button>
-    <br><br>
+      <div class="form-group">
+        <input type="number" name="coin" id="coin" placeholder="Coin">
+        <div class="input-btn">
+          <button type="button" class="copy-btn" onclick="copy('coin')">Copy</button>
+          <button type="button" class="paste-btn" onclick="paste('coin')">Paste</button>
+          <button type="button" class="clear-btn" onclick="clearInput('coin')">Clear</button>
+        </div>
+      </div>
 
-    <input type="text" name="link" id="link"><br><br>
-    <button type="button" onclick="copy('link')">Copy</button>
-    <button type="button" onclick="paste('link')">Paste</button>
-    <button type="button" onclick="clearInput('link')">Clear</button>
-    <br><br>
+      <div class="form-group">
+        <input type="text" name="link" id="link" placeholder="Task Link">
+        <div class="input-btn">
+          <button type="button" class="copy-btn" onclick="copy('link')">Copy</button>
+          <button type="button" class="paste-btn" onclick="paste('link')">Paste</button>
+          <button type="button" class="clear-btn" onclick="clearInput('link')">Clear</button>
+        </div>
+      </div>
 
-    <button type="submit">Update</button>
-    <button type="button" onclick="closePopup()">Close</button>
-  </form>
+      <button type="submit">Update Task</button>
+      <button type="button" class="close-btn" onclick="closePopup()">Close</button>
+    </form>
+  </div>
 </div>
 
 <script>
-  function openEdit(task) {
-    document.getElementById("popup").style.display = "block";
+function openEdit(task){
+  document.getElementById("popup").style.display = "flex";
+  document.getElementById("taskId").value = task._id;
+  document.getElementById("taskPic").value = task.taskPic;
+  document.getElementById("fullName").value = task.fullName;
+  document.getElementById("coin").value = task.coin;
+  document.getElementById("link").value = task.link;
+}
 
-    document.getElementById("taskId").value = task._id;
-    document.getElementById("taskPic").value = task.taskPic;
-    document.getElementById("fullName").value = task.fullName;
-    document.getElementById("coin").value = task.coin;
-    document.getElementById("link").value = task.link;
-  }
+function closePopup(){
+  document.getElementById("popup").style.display = "none";
+}
 
-  function closePopup() {
-    document.getElementById("popup").style.display = "none";
-  }
+// Copy / Paste / Clear
+function copy(id){
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.value);
+}
 
-  // Auto select text
-  document.querySelectorAll("input").forEach(input => {
-    input.addEventListener("focus", function() {
-      this.select();
-    });
-  });
+async function paste(id){
+  const text = await navigator.clipboard.readText();
+  document.getElementById(id).value = text;
+}
 
-  // Copy
-  function copy(id) {
-    const el = document.getElementById(id);
-    navigator.clipboard.writeText(el.value);
-  }
-
-  // Paste
-  async function paste(id) {
-    const text = await navigator.clipboard.readText();
-    document.getElementById(id).value = text;
-  }
-
-  // Clear
-  function clearInput(id) {
-    document.getElementById(id).value = "";
-  }
+function clearInput(id){
+  document.getElementById(id).value = "";
+}
 </script>
+
+</body>
+</html>

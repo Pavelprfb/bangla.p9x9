@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Tasks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f5f7fa;
+    }
+
+    .wrapper-task {
+      padding: 20px;
+    }
+
+    .title-task {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .grid-task {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card-task {
+      background: #fff;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .task-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .task-name {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .task-info {
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .task-info p {
+      margin: 4px 0;
+    }
+
+    .task-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 10px;
+      background: #4facfe;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrapper-task">
+  <div class="title-task">All Tasks</div>
+
+  <div class="grid-task">
+
+    <% allData.forEach(task => { %>
+
+      <div class="card-task">
+
+        <img src="<%= task.taskPic %>" class="task-img">
+
+        <div class="task-name"><%= task.fullName %></div>
+
+        <div class="task-info">
+          <p><strong>Coin:</strong> <%= task.coin %></p>
+          <p><strong>Claimed:</strong> <%= task.email.length %></p>
+          <p><strong>Created:</strong> <%= task.createdAt.toDateString() %></p>
+        </div>
+
+        <a href="<%= task.link %>" target="_blank" class="task-link">
+          Visit Link
+        </a>
+
+      </div>
+
+    <% }) %>
+
+  </div>
+</div>
+
+</body>
+</html>
