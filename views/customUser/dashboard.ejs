@@ -226,6 +226,33 @@
           .secondDiv-486 {
             padding: 30px;
           }
+          
+          #userDataNotFound{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 30vh;
+            box-shadow: 0 0 10px black;
+            width: 90%;
+            margin: 10px auto;
+            border-radius: 5px;
+          }
+          .loginInfo{
+            text-align: center;
+            margin: 10px auto;
+          }
+          .loginAndSignupDiv a{
+            text-decoration: none;
+            text-align: center;
+            background: #41fdb1;
+            color: black;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            
+          }
+          
       </style>
   </head>
   <body>
@@ -307,8 +334,13 @@
     
       <% } else { %>
         <div id="userDataNotFound">
-          <a href="/user/signup" id="signup">Sign Up</a>
-          <a href="/user/login" id="login">Login</a>
+          <div class="loginInfo">
+            দখিত আপনাকে আগে একাউন্ট তৈরি করতে হবে। আপনার যদি একাউন্ট থাকে তাহলে লগইন করুন।
+          </div>
+          <div class="loginAndSignupDiv">
+            <a href="/user/signup" id="signup">Sign Up</a>
+            <a href="/user/login" id="login">Login</a>
+          </div>
         </div>
       <% } %>
     

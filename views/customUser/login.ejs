@@ -4,111 +4,145 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Login</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+    /* Container */
+    .login-wrapper-x1 {
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      height: 40vh;
+      background: #ffffff; /* changed এখানে */
     }
 
-    .login-form {
+    /* Form Box */
+    .login-box-x1 {
       background: #fff;
       padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      width: 350px;
+      border-radius: 12px;
+      width: 320px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
     }
 
-    .login-form h2 {
-      text-align: center;
+    .login-title-x1 {
       margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
     }
 
-    .login-form input {
+    /* Input group */
+    .input-group-x1 {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-group-x1 input {
       width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .login-form button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .login-form button:hover {
-      background: #0056b3;
-    }
-
-    .login-form p {
-      text-align: center;
-      margin-top: 10px;
+      padding: 10px 40px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
       font-size: 14px;
+      transition: 0.3s;
+      display: block;
+      margin: auto;
     }
 
-    .login-form p a {
-      color: #007bff;
+    .input-group-x1 input:focus {
+      border-color: #4facfe;
+      box-shadow: 0 0 5px rgba(79,172,254,0.5);
+    }
+
+    .input-group-x1 i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 12px;
+      color: #999;
+    }
+
+    /* Button */
+    .login-btn-x1 {
+      width: 100%;
+      padding: 10px;
+      background: #4facfe;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-btn-x1:hover {
+      background: #3a8de0;
+    }
+
+    /* Link */
+    .login-footer-x1 {
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .login-footer-x1 a {
+      color: #4facfe;
       text-decoration: none;
+      font-weight: bold;
     }
 
     /* Toast */
     #toast {
-      visibility: hidden;
-      min-width: 250px;
-      margin-left: -125px;
-      background-color: #e74c3c;
-      color: #fff;
-      text-align: center;
-      border-radius: 5px;
-      padding: 16px;
       position: fixed;
-      z-index: 9999;
-      left: 50%;
-      top: 30px;
-      font-size: 14px;
+      top: 20px;
+      right: 20px;
+      background: #333;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      opacity: 0;
+      transition: 0.3s;
+      z-index: 999;
     }
 
     #toast.show {
-      visibility: visible;
-      animation: fadein 0.5s, fadeout 0.5s 3s;
-    }
-
-    @keyframes fadein {
-      from { top: 0; opacity: 0; } 
-      to { top: 30px; opacity: 1; }
-    }
-
-    @keyframes fadeout {
-      from { top: 30px; opacity: 1; }
-      to { top: 0; opacity: 0; }
+      opacity: 1;
     }
   </style>
 </head>
+
 <body>
+  
+  <%- include("../website/nav.ejs") %>
 
   <div id="toast"></div>
 
-  <form class="login-form" id="loginForm">
-    <h2>User Login</h2>
+  <div class="login-wrapper-x1">
+    <form class="login-box-x1 login-form" id="loginForm">
+      <h2 class="login-title-x1">User Login</h2>
 
-    <input type="text" name="loginId" placeholder="Username, Email or Number" required>
-    <input type="password" name="password" placeholder="Password" required>
+      <div class="input-group-x1">
+        <i class="fa fa-user"></i>
+        <input type="text" name="loginId" placeholder="Username, Email or Number" required>
+      </div>
 
-    <button type="submit">Login</button>
+      <div class="input-group-x1">
+        <i class="fa fa-lock"></i>
+        <input type="password" name="password" placeholder="Password" required>
+      </div>
 
-    <p>Don't have an account? <a href="/user/signup">Signup</a></p>
-  </form>
+      <button type="submit" class="login-btn-x1">
+        <i class="fa fa-sign-in-alt"></i> Login
+      </button>
+
+      <p class="login-footer-x1">
+        Don't have an account? <a href="/user/signup">Signup</a>
+      </p>
+    </form>
+  </div>
 
   <script>
     const form = document.getElementById("loginForm");
@@ -120,38 +154,39 @@
       setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3500);
     }
 
-    // JS অংশ
-form.addEventListener("submit", async (e) => {
-  e.preventDefault(); // prevent page reload
+    // JS অংশ (unchanged)
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-    // lowercase only username/email
-    data[key] = (key === 'loginId') ? value.toLowerCase() : value;
-  });
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = (key === 'loginId') ? value.toLowerCase() : value;
+      });
 
-  try {
-    const res = await fetch("/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      try {
+        const res = await fetch("/user/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          window.location.href = result.redirect;
+        } else {
+          showToast(result.message);
+        }
+
+      } catch (err) {
+        console.error(err);
+        showToast("Something went wrong.");
+      }
     });
-
-    const result = await res.json();
-
-    if (result.success) {
-      window.location.href = result.redirect;
-    } else {
-      showToast(result.message); // specific error or statusMessage
-    }
-
-  } catch (err) {
-    console.error(err);
-    showToast("Something went wrong.");
-  }
-});
   </script>
 
+  <%- include("../website/footer.ejs") %>
+  <%- include("../website/footerNav.ejs") %>
 </body>
 </html>
