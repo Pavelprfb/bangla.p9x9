@@ -88,6 +88,11 @@
       display: none; /* আগে hide থাকবে */
     }
 
+    .default-user-icon-x2 {
+      font-size: 50px;
+      color: #bbb;
+    }
+
     .register-btn-x2 {
       width: 100%;
       padding: 10px;
@@ -126,6 +131,10 @@
         <i class="fa fa-image"></i>
 
         <div class="img-preview-box-x2">
+          <!-- Default Icon -->
+          <i class="fa fa-user default-user-icon-x2" id="defaultIcon"></i>
+
+          <!-- Preview Image -->
           <img id="previewImg" src="" alt="Preview">
         </div>
 
@@ -190,25 +199,26 @@
       referInput.readOnly = false;
     }
 
-    // image preview (updated but old logic intact)
+    // image preview + icon control
     const fileInput = document.getElementById("profilePic");
     const previewImg = document.getElementById("previewImg");
+    const defaultIcon = document.getElementById("defaultIcon");
 
     fileInput.addEventListener("change", function () {
       const file = this.files[0];
 
-      // যদি file remove করে
       if (!file) {
         previewImg.style.display = "none";
         previewImg.src = "";
+        defaultIcon.style.display = "block";
         return;
       }
 
-      // শুধু image allow
       if (!file.type.startsWith("image/")) {
         alert("Please select a valid image!");
         fileInput.value = "";
         previewImg.style.display = "none";
+        defaultIcon.style.display = "block";
         return;
       }
 
@@ -216,7 +226,8 @@
 
       reader.onload = function (e) {
         previewImg.src = e.target.result;
-        previewImg.style.display = "block"; // select করার পর show
+        previewImg.style.display = "block";
+        defaultIcon.style.display = "none";
       };
 
       reader.readAsDataURL(file);

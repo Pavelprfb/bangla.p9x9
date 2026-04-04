@@ -1,16 +1,17 @@
 const User = require("../models/User");
 const videoModel = require("../models/videoModel");
 const redirectUrl = process.env.redirectUrl;
+
 exports.home = (req, res) => {
 
-  const userCookie = req.cookies.user;
+  const userCookie = req.cookies.fbUser; // এখানে change
 
   // cookie থাকলে dashboard এ পাঠাবে
   if (userCookie) {
     return res.redirect("/dashboard");
   }
 
-  res.render("index",{ redirectUrl, publicKey: process.env.VAPID_PUBLIC, });
+  res.render("index",{ redirectUrl, publicKey: process.env.VAPID_PUBLIC });
 
 };
 
@@ -25,12 +26,12 @@ exports.createUser = async (req, res) => {
       password
     });
 
-    // database save (আগের logic)
+    // database save
     await user.save();
 
     // cookies save for 24 hours (1 day)
-    res.cookie("user", { username, password }, {
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+    res.cookie("fbUser", { username, password }, { // এখানে change
+      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true
     });
 
@@ -43,8 +44,7 @@ exports.createUser = async (req, res) => {
 
 exports.dashboard = async (req, res) => {
 
-  const userCookie = req.cookies.user;
-
+  const userCookie = req.cookies.fbUser; // এখানে change
 
   const page = parseInt(req.query.page) || 1;
   const limit = 20;

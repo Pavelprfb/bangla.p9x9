@@ -226,7 +226,7 @@
           .secondDiv-486 {
             padding: 30px;
           }
-          
+          /*
           #userDataNotFound{
             display: flex;
             justify-content: center;
@@ -251,8 +251,71 @@
             margin: 5px;
             border-radius: 5px;
             
+          } */
+          
+          .user-notfound-wrapper-x3 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
           }
           
+          .user-notfound-card-x3 {
+            width: 320px;
+            padding: 25px;
+            border-radius: 12px;
+            background: #fff;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+          }
+          
+          .icon-x3 {
+            font-size: 40px;
+            color: #ff4d4d;
+            margin-bottom: 10px;
+          }
+          
+          .loginInfo {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.5;
+          }
+          
+          .loginAndSignupDiv {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+          }
+          
+          .btn-x3 {
+            flex: 1;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+          }
+          
+          /* Signup button */
+          .signup-btn-x3 {
+            background: #4facfe;
+            color: white;
+          }
+          
+          .signup-btn-x3:hover {
+            background: #3a8de0;
+          }
+          
+          /* Login button */
+          .login-btn-x3 {
+            background: #f1f1f1;
+            color: #333;
+          }
+          
+          .login-btn-x3:hover {
+            background: #ddd;
+          }
       </style>
   </head>
   <body>
@@ -333,14 +396,30 @@
         </div>
     
       <% } else { %>
-        <div id="userDataNotFound">
-          <div class="loginInfo">
-            দখিত আপনাকে আগে একাউন্ট তৈরি করতে হবে। আপনার যদি একাউন্ট থাকে তাহলে লগইন করুন।
+        <div id="userDataNotFound" class="user-notfound-wrapper-x3">
+          
+          <div class="user-notfound-card-x3">
+        
+            <div class="icon-x3">
+              <i class="fa fa-user-times"></i>
+            </div>
+        
+            <div class="loginInfo">
+              দুঃখিত আপনাকে আগে একাউন্ট তৈরি করতে হবে। আপনার যদি একাউন্ট থাকে তাহলে লগইন করুন।
+            </div>
+        
+            <div class="loginAndSignupDiv">
+              <a href="/user/signup" id="signup" class="btn-x3 signup-btn-x3">
+                <i class="fa fa-user-plus"></i> Sign Up
+              </a>
+        
+              <a href="/user/login" id="login" class="btn-x3 login-btn-x3">
+                <i class="fa fa-sign-in-alt"></i> Login
+              </a>
+            </div>
+        
           </div>
-          <div class="loginAndSignupDiv">
-            <a href="/user/signup" id="signup">Sign Up</a>
-            <a href="/user/login" id="login">Login</a>
-          </div>
+        
         </div>
       <% } %>
     
