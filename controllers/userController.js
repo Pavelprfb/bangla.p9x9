@@ -3,16 +3,7 @@ const videoModel = require("../models/videoModel");
 const redirectUrl = process.env.redirectUrl;
 
 exports.home = (req, res) => {
-
-  const userCookie = req.cookies.fbUser; // এখানে change
-
-  // cookie থাকলে dashboard এ পাঠাবে
-  if (userCookie) {
-    return res.redirect("/dashboard");
-  }
-
-  res.render("index",{ redirectUrl, publicKey: process.env.VAPID_PUBLIC });
-
+  res.redirect("/dashboard");
 };
 
 
@@ -52,6 +43,7 @@ exports.dashboard = async (req, res) => {
 
   const allData = await videoModel
     .find({})
+    .sort({ _id: -1 }) // newest first (based on ObjectId)
     .skip(skip)
     .limit(limit);
 
