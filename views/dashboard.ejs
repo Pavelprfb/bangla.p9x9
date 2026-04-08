@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>শুধু বাংলা ভিডিও</title>
-
+<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 <!-- Facebook Meta Tags -->
 <meta property="og:url" content="https://bangla.p9x9.com/">
 <meta property="og:type" content="website">
@@ -155,20 +155,7 @@ h2 {
 <%- include("notification") %>
 <%- include("notificationCard") %>
 
-<% if(user){ %>
-  <!-- User is logged in, show content -->
-<% } else { %>
-  <div id="indexContainer"></div>
-  <script>
-    setTimeout(() => {
-      fetch('/')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('indexContainer').innerHTML = html;
-        });
-    }, 3000);
-  </script>
-<% } %>
+
 
 <div class="container">
 

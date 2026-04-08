@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Send Notification</title>
+<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 <style>
 *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
 body{ background: linear-gradient(135deg, #141e30, #243b55); color:#fff; padding:20px; }
@@ -96,14 +97,29 @@ button[type="submit"]:hover{
   .input-wrapper{ flex-direction:column; }
   .input-btn{ flex-wrap:wrap; gap:4px; margin-left:0; }
 }
+h3{
+  text-align: center;
+  margin: 10px;
+}
 </style>
 </head>
 <body>
 
 <h2>Send Notification</h2>
+<div class="form-group">
+  <select id="videoSelect" onchange="fillData()" style="width:100%; padding:10px; border-radius:8px;">
+    <option value="">-- Select Video --</option>
+
+    <% videoData.forEach((video, index) => { %>
+      <option value="<%= index %>">
+        <%= video.title %>
+      </option>
+    <% }) %>
+  </select>
+</div>
 
 <form action="/admin/notification" method="POST">
-
+  <h3>User <%= dataLength %></h3>
   <div class="form-group">
     <div class="input-wrapper">
       <input type="text" id="title" name="title" placeholder="Notification Text">
@@ -142,6 +158,9 @@ button[type="submit"]:hover{
 </form>
 
 <div id="toast"></div>
+<script>
+  const videos = <%- JSON.stringify(videoData) %>;
+</script>
 
 <script>
 function showToast(msg){
@@ -174,6 +193,20 @@ function clearInput(id){
     const input = document.getElementById(id);
     input.value = "";
     showToast("🗑 Cleared input");
+}
+
+function fillData(){
+  const index = document.getElementById("videoSelect").value;
+
+  if(index === "") return;
+
+  const video = videos[index];
+
+  document.getElementById("title").value = video.title || "";
+  document.getElementById("image").value = video.imageLink || "";
+  document.getElementById("url").value = video.videoLink || "";
+
+  showToast("✅ Data Loaded from Video");
 }
 </script>
 

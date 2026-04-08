@@ -1,4 +1,5 @@
 const Subscription = require("../models/Subscription");
+const videoModel = require("../models/videoModel");
 const webpush = require("../config/vapid");
 
 exports.saveSubscription = async (req, res) => {
@@ -17,9 +18,11 @@ exports.saveSubscription = async (req, res) => {
 };
 
 
-exports.adminPage = (req, res) => {
-
-  res.render("adminNotification");
+exports.adminPage = async (req, res) => {
+  const allData = await Subscription.find({});
+  const videoData = await videoModel.find({});
+  const dataLength = allData.length
+  res.render("adminNotification", { dataLength, videoData });
 
 };
 
