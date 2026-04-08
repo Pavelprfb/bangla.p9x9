@@ -12,26 +12,35 @@ exports.login = async (req, res) => {
 
 
 exports.task = async (req, res) => {
-  
-    const userCookie = req.cookies.user;
 
-    if (!userCookie) {
-      return res.render("customUser/task", { 
-        userData: null
-      });
-    }
-    
-    
-    const parsedUser = typeof userCookie === "string"
+  const userCookie = req.cookies.user;
+
+  if (!userCookie) {
+    return res.render("customUser/task", { 
+      userData: null
+    });
+  }
+
+  let parsedUser;
+
+  try {
+    parsedUser = typeof userCookie === "string"
       ? JSON.parse(userCookie)
       : userCookie;
-    const taskData = await TaskModel.find({});
-    
-    res.render("customUser/task", { 
-      userData: true,
-      taskData,
-      email: parsedUser.email
-    });
+  } catch (error) {
+    console.log("Invalid JSON in cookie:", userCookie);
+
+    // fallback (error হলেও crash করবে না)
+    parsedUser = {};
+  }
+
+  const taskData = await TaskModel.find({});
+  
+  res.render("customUser/task", { 
+    userData: true,
+    taskData,
+    email: parsedUser.email || null
+  });
 
 };
 

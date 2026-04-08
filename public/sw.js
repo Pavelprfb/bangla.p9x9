@@ -3,7 +3,7 @@ self.addEventListener("push", event => {
   const data = event.data.json();
 
   self.registration.showNotification(data.title, {
-    body: "New Notification",
+    body: "New notification",
     icon: data.image,
     image: data.image,
     data: {
