@@ -10,8 +10,11 @@ exports.home = async (req, res) => {
     
     
     const videoData = await videoModel.findOne({ routeName });
+    const allData = await videoModel.aggregate([
+      { $sample: { size: 15 } }
+    ]);
 
-    res.render("video/video", { videoData, redirectUrl, publicKey: process.env.VAPID_PUBLIC, user: userCookie, });
+    res.render("video/video", { videoData, redirectUrl, publicKey: process.env.VAPID_PUBLIC, user: userCookie, allData});
 
   } catch (error) {
     res.send(error.message);
