@@ -201,10 +201,11 @@ function fillData(){
   if(index === "") return;
 
   const video = videos[index];
-
+  const domain = "https://" + window.location.host;
   document.getElementById("title").value = video.title || "";
   document.getElementById("image").value = video.imageLink || "";
-  document.getElementById("url").value = video.videoLink || "";
+
+  document.getElementById("url").value = `${domain}/video/bangla/${video.routeName || ""}`;
 
   showToast("✅ Data Loaded from Video");
 }
